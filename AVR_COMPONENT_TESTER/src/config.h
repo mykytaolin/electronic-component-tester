@@ -1,8 +1,7 @@
-#include Wire.h
-#include SH1106Wire.h
+//#include SH1106Wire.h
+#include <avr/pgmspace.h>
 
-
-SH1106Wire display(0x3C, A4, A5)
+//SH1106Wire display(0x3C, A4, A5)
 
 #define MCU atmega328p
 #define F_CPU 16000000UL
@@ -12,7 +11,7 @@ SH1106Wire display(0x3C, A4, A5)
 #define WITH_AUTO_REF // enables reading of internal REF-voltage to get koef., for the capacity measuring
 #define REF_C_KORR 12 // corrects the reference Voltage for capacity measurement (<40uF)(mV)
 #define REF_L_KORR 40 // corrects the reference Voltage for inductance measurement(mV)
-#define C_H_KORR 0 // defines a correction of 0.1% units for big capacitor measurement
+#define C_H_KORR 0 // defines a correction of 0.1% units for big capacitor measureme           t
 
 #define CAP_EMPTY_LEVEL 4 // empty voltage level of capacitor (mV)
 #define AUTOSCALE_ADC // enables autoscale ABC (needed VCC and bandgap ref)
@@ -27,9 +26,10 @@ SH1106Wire display(0x3C, A4, A5)
 #define BAT_POOR 6400 // set the threshhold of minimal level of low battery charge (64V)
 
 #ifndef ADC_PORT
-#define ADC_PORT PORTC // port C (microcontroller)
-#define ADC_DDR DDRC // DATA DIRECTION REGISTER of C port defines pins as input or output
-#define ADC_PIN PINC // need to read input pins status
+  #define ADC_PORT PORTC // port C (microcontroller)
+  #define ADC_DDR DDRC // DATA DIRECTION REGISTER of C port defines pins as input or output
+  #define ADC_PIN PINC // need to read input pins status
+#endif
 
 /*  #define TP1 0 // reference to pin A0(test point)
 #define TP1 1 // reference to pin A1
@@ -42,33 +42,30 @@ SH1106Wire display(0x3C, A4, A5)
   Definition of used resistors Ohm
   Standard value for R_L is 680 Ohm(low resistor) and 470 kOhm for R_H(high resistor)
 */
-
-#define R_L_VAL 6800 // value 680 Ohm multiplied by 10 for 0.1 resolution (680.0)
-#define R_H_VAL 4700 // value 470kOhm multiplied by 10 and divided by 100 to get 470
 /*----------------------------------------------------------------------------------
                     Measurement Channel PIN CONFIGURATION*/
                     
 // Channel 1 (GoldPin1)
-#define CH1_RL1_PIN 0 // PB0 
-#define CH1_RH1_PIN 1 // PB1 
 #define CH1_MEASURE_PIN 0 // PC0 A0
 
 // Channel 2 (GoldPin2)
-#define CH2_RL2_PIN 2 // PB2
-#define CH2_RH2_PIN 3 // PB3
+#define CH2_RO2_PIN 7 // PD7 D7 (100 Ohm)
+#define CH2_RK2_PIN 0 // PB0 D8 (10 kOhm)
+#define CH2_RM2_PIN 1 // PB1 D9 (1 MOhm)
+#define CH2_RL2_PIN 2 // PB2 D10 (680 Ohm)
+#define CH2_RH2_PIN 3 // PB3 D11 (470 kOhm)
 #define CH2_MEASURE_PIN 1 // PC1 A1
 
 // Channel 3 (GoldPin3)
-#define CH3_RL3_PIN 4 // PB4
-#define CH3_RH3_PIN 5 // PB5
 #define CH3_MEASURE_PIN 2 // PC2 A2
 
 //---------------------------------------------------------------------------------
 // discharge pin 
-#define DIS_CH_PIN 5 // PD5
-#define DIS_CH_DDRD // DDRD - data direction register D (PD2 - PD7)
+#define CH1_DIS_CH_PIN 0 // PC0 A0
+#define CH3_DIS_CH_PIN 2 // PC2 A2
+#define DIS_CH_DDR DDRC // DDRD - data direction register D (PD2 - PD7)
 // DDR : 0 - input , 1 - output
-#define DIS_CH_PORTD // state control 0 - low 0V and 1 - high 5V
+#define DIS_CH_PORT PORTC // state control 0 - low 0V and 1 - high 5V
 
 
 #define R_DDR DDRB // DATA DIRECTION REGISTER of port B
@@ -92,6 +89,7 @@ HW_ - hardware
 EN_ - enable
 RS_ - register select
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+extern const uint16_t RLtab[] PROGMEM;
 
 #define UVCC 5000 // defines the VCC voltage in mV
 // used to compensate the voltage drop in charge time (more accurate for condesators with huge ESR)
@@ -114,7 +112,7 @@ Button that changes measurement resolution
 // While debug turn it off
 // #define WDT_enabled
 /*-----------------------------------------
-            End of configuration
+            End of basic configuration
 ------------------------------------------*/
 
 /*-----------------------------------------
@@ -256,7 +254,7 @@ rcall - relative call (2 Bytes) for small amount of memory*/
 /*----------------------------------------------------------------------------------------------------------------
                                               ADC CLOCK*/
 #define F_ADC 125000 // 125kHz frequency ADC while CPU frequency is 16MHz
-#if F_CPU/F_ADC = 128
+#if F_CPU/F_ADC == 128
   #define AUTO_CLOCK_DIV (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) // 24.9.2 ATmega328 documentation 172 row
 #endif
 //----------------------------------------------------------------------------------------------------------------
@@ -305,6 +303,7 @@ rcall - relative call (2 Bytes) for small amount of memory*/
   #define wait_about2s sleep_2s(400)
   #define wait_about3s sleep_3s(600)
   #define wait_about4s sleep_4s(800)
+#endif
 //----------------------------------------------------------------------------------
 
 #undef AUTO_RH
@@ -347,7 +346,7 @@ rcall - relative call (2 Bytes) for small amount of memory*/
 #endif
 
 //configuration style of pin names 
-#if EBC_STYLE = 123
+#if EBC_STYLE == 123
   #undef EBC_STYLE
 #endif
 
@@ -363,3 +362,4 @@ rcall - relative call (2 Bytes) for small amount of memory*/
   #endif
 #else
   #define COMMON_EMITTER
+#endif

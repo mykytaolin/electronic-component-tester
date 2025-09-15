@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "~/.platformio/packages/toolchain-atmelavr/avr/include/**"
+            ],
+            "defines": [],
+            "compilerPath": "~/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "cStandard": "c23",
+            "cppStandard": "gnu++23",
+            "intelliSenseMode": "gcc-x86"
+        }
+    ],
+    "version": 4
+}

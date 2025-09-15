@@ -1,0 +1,11 @@
+void init_adc();
+void timer_init(void);
+void pins_init(void);
+uint16_t read_adc(uint8_t channel);
+uint16_t read_adc_avg(uint8_t channel, uint8_t sample);
+void test_resistor(uint8_t resistor_pin);
+void test_connections(uint8_t measure_pin);
+void debug_portc_state(const char* label);
+void test_only_connections(measure_pin);
+void check_pin_state(uint8_t pin);
+void check_resistors();
