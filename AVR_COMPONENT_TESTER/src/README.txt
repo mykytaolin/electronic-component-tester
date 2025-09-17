@@ -24,3 +24,5 @@ PROCES WYZNACZENIA CHARAKTERYSTYKI TRANZYSTORÓW I DIOD
 ***********Bootloader programming*********************
 avrdude -p m328p -c arduino -P /dev/ttyUSB0 -b 115200 -U lfuse:w:0xFF:m -U hfuse:w:0xDE:m -U efuse:w:0x05:m
 *****************************************************
+flash: main.hex
+	avrdude -p m328p -c arduino -P $(PORT) -b 115200 -U flash:w:$<

@@ -17,7 +17,7 @@ main.hex: main.elf
 	avr-objcopy -O ihex $^ $@
 
 flash: main.hex
-	avrdude -p m328p -c arduino -P $(PORT) -b 115200 -U flash:w:$<
+	avrdude -p m328p -c usbasp -P usb -U flash:w:$<
 
 clean:
 	rm -f $(OBJS) main.elf main.hex
