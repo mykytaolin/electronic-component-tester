@@ -14,6 +14,7 @@ void init_adc() {
   PORTC &= ~((1 << PC0) | (1 << PC1) | (1 << PC2));
 }
 
+
 void timer_init(void){ // timer cofiguration 16 MHz
 	TCCR1B = (1 << CS10) | (0 << CS11) | (1 << CS12); //table 15-5 15.11 datasheet
 	TCNT1 = 0; // reset counter
@@ -28,13 +29,35 @@ void pins_init(void){
 }
 
 uint16_t read_adc(uint8_t channel){
-	ADMUX = (1 << REFS0) | (channel & 0x07);
-	ADCSRA |= (1 << ADSC);
+	ADMUX = (1 << REFS0) | (channel & 0x07); // VCC as reference
+	ADCSRA |= (1 << ADSC); // conversion start
 
-	while(ADCSRA & (1 << ADSC));
-	return ADC;
+	while(ADCSRA & (1 << ADSC)); // while converting
+	return ADC; // return 10 bit result
 
 }
+
+uint16_t read_vcc(uint8_t channel){
+	 ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // turn on ADC and init frequancy factor 128
+	 ADMUX = (1 << REFS1) | (1 << MUX3) | (1 << MUX2) | (1 << MUX1); // MUX3:0 = 1 Internal 1.1V Voltage Bandgap
+	 // REFS0 = 1 VCC as reference
+
+	 _delay_ms(10); // waiting for result stability
+
+	 ADCSRA |= (1 << ADSC); // start converting
+
+	 while(ADCSRA & (1 << ADSC)); // while converting
+	 return ADC; // return 10 bit result
+}
+
+float calculate_real_vcc(){
+	uint16_t adc_value = read_vcc();
+	float vcc = (1.1 * 1023.0) / adc_value; // VCC in Volts
+
+	return vcc * 1000; // conversion to mV
+}
+
+
 // function that filtrates noise (avg final result)
 uint16_t read_adc_avg(uint8_t channel, uint8_t sample){
 
