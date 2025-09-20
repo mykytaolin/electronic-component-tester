@@ -51,7 +51,7 @@ uint16_t read_vcc(uint8_t channel){
 }
 
 float calculate_real_vcc(){
-	uint16_t adc_value = read_vcc();
+	uint16_t adc_value = read_vcc(CH2_MEASURE_PIN);
 	float vcc = (1.1 * 1023.0) / adc_value; // VCC in Volts
 
 	return vcc * 1000; // conversion to mV
