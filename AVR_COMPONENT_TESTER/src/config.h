@@ -63,7 +63,7 @@
 // discharge pin 
 #define CH1_DIS_CH_PIN 0 // PC0 A0
 #define CH3_DIS_CH_PIN 2 // PC2 A2
-#define DIS_CH_DDR DDRC // DDRD - data direction register D (PD2 - PD7)
+#define DIS_CH_DDR DDRC // DDRD - data direction register C (PC0 - PC5)
 // DDR : 0 - input , 1 - output
 #define DIS_CH_PORT PORTC // state control 0 - low 0V and 1 - high 5V
 
@@ -77,10 +77,15 @@
 #define ON_PIN_REG PIND // needed for checking pin stan from port D
 #define ON_PIN 7 // power control from PD7
 
+// button that changing measure type
+#define CHNG_MEASURE_TYPE 3 // PC3 A3
+#define CHNG_MEASURE_DDR DDRC
+#define CHNG_MEASURE_PORT PORTC
+
 //#ifndef STRIP_GRID_BOARD
 //  #define RST_PIN 0 // reset pin D0
 //#else
-  #define RST_PIN 17 // A3 reset pin (button)
+// #define RST_PIN 17 // A3 reset pin (button)
 //#endif
 
 /* ----------------------------------------------------------------------------------------------------------------------------------------------------------------

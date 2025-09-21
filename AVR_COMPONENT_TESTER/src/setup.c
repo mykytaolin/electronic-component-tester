@@ -70,6 +70,7 @@ uint16_t read_adc_avg(uint8_t channel, uint8_t sample){
 	return sum / sample;
 }
 
+// func that activating pins checking and disactivating
 void test_resistor(uint8_t resistor_pin){
 	R_DDR |= (1 << resistor_pin);
 	R_PORT |= (1 << resistor_pin);

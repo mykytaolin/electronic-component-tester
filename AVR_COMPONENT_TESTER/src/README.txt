@@ -17,8 +17,11 @@ PROCES POMIARU POJEMNOŚCI
 -Pomiar czasu i napięcia (do 400mV)
 -Obliczanie pojemności z równania ładowania
 -Filtracja wyników
-
+------------------------------------------------------------------------------------------------------
 PROCES POMIARU REZYSTANCJI
+- wybór znanego rezystora w zależności od napięcia na nieznanym rezystorze
+- obliczanie nieznanej rezystancji z dzielnika napięciowego
+
 PROCES WYZNACZENIA CHARAKTERYSTYKI TRANZYSTORÓW I DIOD
 
 ***********Bootloader programming*********************
